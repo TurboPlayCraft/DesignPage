@@ -1,0 +1,55 @@
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Didact+Gothic&display=swap");
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  font-family: "Balsamiq Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 30px;
+
+  line-height: 0.0000001;
+  color: white;
+}
+#lottie-container {
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+video {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  object-fit: cover;
+}
+.content {
+  position: relative;
+  z-index: 5;
+  color: white;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+}
+h1 {
+  font-size: 60px;
+  color: white;
+  mix-blend-mode: difference;
+}
