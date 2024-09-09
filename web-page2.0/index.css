@@ -5,8 +5,8 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  cursor: pointer;
-  /* cursor: none !important; */
+  /* cursor: pointer; */
+  cursor: none !important;
 }
 body {
   background-color: rgb(255, 255, 255);
@@ -29,7 +29,6 @@ body {
   left: 90%;
   width: 100px;
   height: 100px;
-  /* cursor: pointer; */
 }
 video {
   position: absolute;
@@ -51,14 +50,21 @@ video {
   transform: translateY(-50%);
 }
 .cursor {
-  position: absolute;
+  top: -2px !important;
+  left: -3px !important;
+  position: fixed;
   pointer-events: none;
   z-index: 9999;
   width: 15px;
   height: 15px;
   background-color: rgb(255, 255, 255);
+  transform: translate(-50%, -50%);
   mix-blend-mode: difference;
   border-radius: 50%;
+}
+.cursor.clickable .cursor {
+  width: 30px;
+  height: 30px;
 }
 h1,
 p {

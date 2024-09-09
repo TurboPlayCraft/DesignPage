@@ -1,5 +1,25 @@
 let theme = localStorage.setItem("theme", "Dark");
 let lowPerformance = true;
+let cursor;
+let cursorx = 0;
+let cursory = 0;
+let rafid;
+
+function init() {
+  cursor = document.querySelector("#cursor");
+  document.addEventListener("mousemove", handleMouseMove, { passive: true });
+  rafid = requestAnimationFrame(update);
+}
+
+function handleMouseMove(event) {
+  cursorx = event.clientX;
+  cursory = event.clientY;
+}
+
+function update() {
+  cursor.style.transform = `translate(${cursorx}px, ${cursory}px)`;
+  rafid = requestAnimationFrame(update);
+}
 
 const animation = lottie.loadAnimation({
   container: document.getElementById("lottie-container"),
@@ -50,11 +70,11 @@ function playReverseBackground() {
 
   var reverseInterval = setInterval(function () {
     if (video.currentTime > 0) {
-      video.currentTime -= 0.05;
+      video.currentTime -= 0.04;
     } else {
       clearInterval(reverseInterval);
     }
-  }, 50);
+  }, 40);
 }
 
 document.getElementById("lottie-container").addEventListener("click", () => {
@@ -73,8 +93,4 @@ document.getElementById("lottie-container").addEventListener("click", () => {
   }
 });
 
-document.addEventListener("mousemove", (event) => {
-  let cursor = document.getElementById("cursor");
-  cursor.style.left = event.clientX + "px";
-  cursor.style.top = event.clientY + "px";
-});
+init();
