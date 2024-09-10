@@ -3,13 +3,11 @@ let lowPerformance = true;
 let cursor;
 let cursorx = 0;
 let cursory = 0;
+let cursorSize;
 let rafid;
-
-function init() {
-  cursor = document.querySelector("#cursor");
-  document.addEventListener("mousemove", handleMouseMove, { passive: true });
-  rafid = requestAnimationFrame(update);
-}
+let isPlaying = false;
+let video;
+let reverseInterval;
 
 function handleMouseMove(event) {
   cursorx = event.clientX;
@@ -17,7 +15,9 @@ function handleMouseMove(event) {
 }
 
 function update() {
-  cursor.style.transform = `translate(${cursorx}px, ${cursory}px)`;
+  cursor.style.transform = `translate(${cursorx - cursorSize / 2}px, ${
+    cursory - cursorSize / 2
+  }px)`;
   rafid = requestAnimationFrame(update);
 }
 
@@ -30,10 +30,30 @@ const animation = lottie.loadAnimation({
 });
 
 animation.addEventListener("DOMLoaded", function () {
-  animation.goToAndStop(animation.totalFrames - 1, true);
+  animation.goToAndStop(animation.totalFrames - 1, true); // set to end (moon)
+  cursor = document.querySelector("#cursor");
+  document.addEventListener("mousemove", handleMouseMove, { passive: true });
+  document.addEventListener("mousedown", mouseDown, { passive: true });
+  document.addEventListener("mouseup", mouseUp, { passive: true });
+  rafid = requestAnimationFrame(update);
+  video = document.getElementById("background-video");
 });
-let isForward = true;
-let isPlaying = false;
+
+function mouseDown() {
+  cursorSize = 20;
+  cursor.animate([{ width: "20px", height: "20px" }], {
+    duration: 200,
+    fill: "forwards",
+  });
+}
+
+function mouseUp() {
+  cursorSize = 15;
+  cursor.animate([{ width: "15px", height: "15px" }], {
+    duration: 200,
+    fill: "forwards",
+  });
+}
 
 function playForward() {
   animation.setDirection(1);
@@ -52,29 +72,28 @@ animation.addEventListener("complete", () => {
 });
 
 function playBackground() {
-  var video = document.getElementById("background-video");
+  clearInterval(reverseInterval);
   video.currentTime = 0;
   video.play();
-
-  video.addEventListener("timeupdate", function () {
-    if (video.currentTime >= video.duration) {
-      video.pause();
-    }
-  });
 }
 
 function playReverseBackground() {
-  var video = document.getElementById("background-video");
+  clearInterval(reverseInterval);
+  if (video.currentTime === 0) {
+    video.currentTime = video.duration;
+  }
   video.pause();
-  video.currentTime = video.duration;
 
-  var reverseInterval = setInterval(function () {
-    if (video.currentTime > 0) {
-      video.currentTime -= 0.04;
-    } else {
+  const fps = 24; // Adjust this value to control the playback speed
+  const frameDuration = 1000 / fps;
+
+  reverseInterval = setInterval(() => {
+    if (video.currentTime <= 0) {
       clearInterval(reverseInterval);
+    } else {
+      video.currentTime = Math.max(0, video.currentTime - 0.05);
     }
-  }, 40);
+  }, frameDuration);
 }
 
 document.getElementById("lottie-container").addEventListener("click", () => {
@@ -83,14 +102,8 @@ document.getElementById("lottie-container").addEventListener("click", () => {
   if (animation.currentFrame === 0) {
     playForward();
     playReverseBackground();
-    return;
-  }
-
-  if (animation.currentFrame === animation.totalFrames - 1) {
+  } else if (animation.currentFrame === animation.totalFrames - 1) {
     playBackward();
     playBackground();
-    return;
   }
 });
-
-init();
