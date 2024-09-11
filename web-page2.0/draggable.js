@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const draggableElements = document.querySelectorAll("image,h1,p,#lottie-container");
+  const draggableElements = document.querySelectorAll("img,h1,p,#lottie-container");
   const debbug = false;
   let textelementX = document.getElementById("elementX");
   let textelementY = document.getElementById("elementY");
